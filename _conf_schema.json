@@ -1,0 +1,51 @@
+{
+    "wake_keywords": {
+        "type": "list",
+        "description": "唤醒关键词",
+        "hint": "消息中包含任意关键词即触发唤醒。例如配置 ['雪酱', '小助手']，消息含 '雪酱你好' 或 '呼叫小助手' 都会被唤醒。留空则仅使用正则匹配。",
+        "default": []
+    },
+    "wake_regexes": {
+        "type": "list",
+        "description": "唤醒正则表达式",
+        "hint": "消息匹配任意正则则触发唤醒。用 re.search 模式，无需写 .*。例如配置 ['^雪酱', '在吗[?？]']，消息以 '雪酱' 开头或含 '在吗?' 都会匹配。与关键词是 OR 关系，满足其一即唤醒。",
+        "default": []
+    },
+    "whitelist": {
+        "type": "list",
+        "description": "群聊白名单",
+        "hint": "只有在白名单内的群聊才会触发唤醒增强功能。为空则不限制群聊。使用 /wgid 获取群聊 ID。",
+        "default": []
+    },
+    "enable_private_chat": {
+        "type": "bool",
+        "description": "启用私聊唤醒",
+        "hint": "开启后私聊也支持关键词/正则唤醒。私聊默认不进入持续唤醒模式，因为私聊本身就是持续对话。",
+        "default": true
+    },
+    "continuous_awakening": {
+        "type": "object",
+        "description": "持续唤醒设置",
+        "hint": "被唤醒后，群聊进入持续唤醒状态，期间所有消息都触发 AI 响应，无需再喊唤醒词。超时后自动退出。",
+        "items": {
+            "enable": {
+                "type": "bool",
+                "description": "启用持续唤醒",
+                "hint": "开启后，被唤醒的群聊会进入持续模式。关闭则每次都要喊唤醒词。",
+                "default": true
+            },
+            "duration": {
+                "type": "int",
+                "description": "持续时长（秒）",
+                "hint": "持续唤醒的最长时间，超时后需要重新唤醒。",
+                "default": 60
+            },
+            "reset_on_reply": {
+                "type": "bool",
+                "description": "回复后重置计时",
+                "hint": "每次 AI 回复后，重新计算持续时间。关闭则固定时长后必定退出。",
+                "default": true
+            }
+        }
+    }
+}
