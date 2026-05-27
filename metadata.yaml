@@ -1,6 +1,9 @@
-name: astrbot_plugin_wake_enhance
+name: astrbot_plugin_continuous_chat
 display_name: 持续对话
+short_desc: 支持关键词/正则唤醒AstrBot，唤醒后可进入持续对话模式
 desc: 支持关键词/正则唤醒 AstrBot，唤醒后可进入持续对话模式（群内所有消息自动触发 AI），支持白名单和私聊。
+author: Soulter
+version: v2.0.0
 help: |
   ## 持续对话
 
@@ -17,5 +20,23 @@ help: |
   - 被唤醒后自动进入持续对话，无需重复喊唤醒词
   - 超时自动退出，也可 /wexit 手动退出
   - 支持 reset_on_reply：每条消息重置计时
-version: v2.0.0
-author: Soulter
+support_platforms:
+  - aiocqhttp
+  - qq_official
+  - qq_official_webhook
+  - telegram
+  - discord
+  - wecom
+  - wecom_ai_bot
+  - lark
+  - dingtalk
+  - slack
+  - kook
+  - vocechat
+  - weixin_official_account
+  - weixin_oc
+  - satori
+  - misskey
+  - line
+  - matrix
+  - mattermost
