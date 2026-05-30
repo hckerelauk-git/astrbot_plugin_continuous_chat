@@ -2,7 +2,7 @@ name: astrbot_plugin_continuous_chat
 display_name: 持续对话
 short_desc: 支持关键词/正则唤醒AstrBot，唤醒后可进入持续对话模式
 desc: 支持关键词/正则唤醒 AstrBot，唤醒后可进入持续对话模式（群内所有消息自动触发 AI），支持白名单和私聊。
-author: hckerelauk-git
+author: elauk
 version: v2.0.0
 help: |
   ## 持续对话
