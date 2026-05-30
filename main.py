@@ -132,6 +132,10 @@ class Main(Star):
         if not self._check_whitelist(group_id):
             return
 
+        # 如果是指令（以/开头），不处理，让命令处理器处理
+        if event.message_str and event.message_str.strip().startswith("/"):
+            return
+
         if self._match_wake(event.message_str):
             event.is_at_or_wake_command = True
             if self._active_enabled():
