@@ -1,4 +1,4 @@
-import time
+﻿import time
 import re
 import asyncio
 
@@ -51,7 +51,7 @@ class Main(Star):
 
     def _start_cleanup(self):
         if self._cleanup_task is None and self._waking:
-            self._cleanup_task = asyncio.get_event_loop().create_task(
+            self._cleanup_task = asyncio.get_running_loop().create_task(
                 self._periodic_cleanup()
             )
 
@@ -74,6 +74,8 @@ class Main(Star):
         return group_id in whitelist
 
     def _match_wake(self, text: str) -> bool:
+        if not text:
+            return False
         for kw in self._keyword_set:
             if kw in text:
                 return True
@@ -106,6 +108,9 @@ class Main(Star):
             yield event.plain_result("私聊无需此功能~")
             return
         group_id = event.message_obj.group_id
+        if not self._check_whitelist(group_id):
+            yield event.plain_result("此群聊不在白名单内~")
+            return
         if group_id not in self._waking:
             yield event.plain_result("当前不在持续唤醒状态~")
             return
@@ -122,6 +127,9 @@ class Main(Star):
 
     @filter.event_message_type(filter.EventMessageType.ALL)
     async def on_message(self, event: AstrMessageEvent):
+        if not event.message_str:
+            return
+
         if event.is_private_chat():
             if self.config.get("enable_private_chat", True):
                 if self._match_wake(event.message_str):
@@ -133,16 +141,18 @@ class Main(Star):
             return
 
         # 如果是指令（以/开头），不处理，让命令处理器处理
-        if event.message_str and event.message_str.strip().startswith("/"):
+        if event.message_str.strip().startswith("/"):
             return
 
+        # 关键词/正则匹配 -> 唤醒 + 进入持续模式
         if self._match_wake(event.message_str):
             event.is_at_or_wake_command = True
             if self._active_enabled():
                 self._waking[group_id] = time.time()
                 self._start_cleanup()
 
-        if group_id in self._waking:
+        # 持续唤醒模式中 -> 所有消息都唤醒
+        elif group_id in self._waking:
             if time.time() - self._waking[group_id] > self._active_duration():
                 self._waking.pop(group_id, None)
                 return
